@@ -20,7 +20,7 @@ const getData = async () => {
 		console.log("Data extraction failed:", error);
 	}
 };
-getData();
+getData()
 
 const createTable = (data) => {
 	const table = document.getElementById("coinTable");
@@ -34,20 +34,20 @@ const createTable = (data) => {
         <th>Change <i class="fa-solid fa-arrow-up-right-dots"/></th>
     </tr>
     </thead>
-    <tbody>
+    <tbody class="table-group-divider">
     `;
 	data.forEach((item) => {
 		tableHTML += `
         <tr>
         <td>${item.rank}</td>
         <td>
-        <span><img src="${item.iconUrl}" width="25px" />${item.name}</span>
-        <sup class="bg-warning bd-rounded rounded-1 text-white ">${
+        <span><img src="${item.iconUrl}" width="25px" class="me-3"/>${item.name}</span>
+        <sup  style="color:${item.color}">${
 			item.symbol
 		}</sup></td>
         <td> &dollar;${Number(item.price).toFixed(4)}</td>
         <td>${formatMarketCap(item.marketCap)}</td>
-        <td class="stonks d-flex gap-2 align-items-center">${item.change}</td>  
+        <td class="stonks">${item.change}</td>  
         </tr>  
         `;
 	});
@@ -86,10 +86,10 @@ const changePrice = (change) => {
 	
 	const stonk = document.createElement("i");
 	if (change > 0) {
-		stonk.className = "fa-solid fa-arrow-trend-up";
+		stonk.className = "fa-solid fa-arrow-trend-up ms-3";
 		stonk.style.color = "lightgreen";
 	} else {
-		stonk.className = "fa-solid fa-arrow-trend-down";
+		stonk.className = "fa-solid fa-arrow-trend-down ms-3";
 		stonk.style.color = "red";
 	}
 	return stonk;
@@ -97,11 +97,8 @@ const changePrice = (change) => {
 
 searchInput.addEventListener("input", (e) => {
 	const table = document.getElementById("coinTable");
-	console.log(e.target.value);
 	table.innerHTML = "";
-	console.log(coins)
 	let result = coins.filter((item) => item.name.toLowerCase().includes(e.target.value.toLowerCase()))
-	console.log(result)
 	let tableHTML = `
     <thead>
     <tr>
@@ -112,24 +109,38 @@ searchInput.addEventListener("input", (e) => {
         <th>Change <i class="fa-solid fa-arrow-up-right-dots"/></th>
     </tr>
     </thead>
-    <tbody>
+    <tbody class="table-group-divider">
     `;
 	result.forEach((item) => {
 		tableHTML += `
         <tr>
         <td>${item.rank}</td>
         <td>
-        <span ><img src="${item.iconUrl}"   width="25px" />${item.name}</span>
-        <sup class="bg-warning bd-rounded rounded-1 text-white ">${
+        <span ><img src="${item.iconUrl}"   class="me-3" width="25px" />${item.name}</span>
+        <sup  style="color:${item.color}" ">${
 			item.symbol
 		}</sup></td>
         <td> &dollar;${Number(item.price).toFixed(4)}</td>
         <td>${formatMarketCap(item.marketCap)}</td>
-        <td class="stonks d-flex gap-2 align-items-center">${item.change}</td>  
+        <td class="stonks">${item.change}</td>   
         </tr>  
         `;
 	});
 	tableHTML += `</tbody>`;
 	table.innerHTML = tableHTML;
-		// .forEach((user) => createTable(user));
+	// change cells
+	const cells = table.querySelectorAll(".stonks");
+	const changeCellArray = Array.from(cells);
+	result.forEach((item, index) => {
+		const cell = changeCellArray[index];
+		const icon = changePrice(item.change);
+		cell.appendChild(icon);
+		if (item.change > 0) {
+            cell.style.color = "lightgreen";
+        }
+		else {
+            cell.style.color = "red";
+        }
+	});
+
 });
