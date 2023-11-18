@@ -11,21 +11,21 @@ const getData = async () => {
 getData();
 
 const createTable = (data) => {
-	const table = document.getElementById("coinTable");
-	let tableHTML = `
+    const table = document.getElementById("coinTable");
+    let tableHTML = `
     <thead>
     <tr>
         <th>#</th>
         <th>Names</th>
         <th>Price</th>
         <th>Market Cap</th>
-        <th>Change</th>
+        <th>Change <i class="fa-solid fa-arrow-up-right-dots"/></th>
     </tr>
     </thead>
     <tbody>
     `;
-	data.forEach((item) => {
-		tableHTML += `
+    data.forEach((item) => {
+        tableHTML += `
         <tr>
         <td>${item.rank}</td>
         <td>
@@ -33,13 +33,21 @@ const createTable = (data) => {
         <sup class="bg-warning bd-rounded rounded-1 text-white ">${item.symbol}</sup></td>
         <td> &dollar;${Number(item.price).toFixed(4)}</td>
         <td>${formatMarketCap(item.marketCap)}</td>
-        <td ><i class="fa-solid fa-arrow-up-right-dots " id="stonks"></i>${item.change}${changePrice(item.change)} </td>
+        <td class="stonks ">${item.change}</td>  
         </tr>  
         `;
-	});
+    });
 
-    tableHTML += `</tbody>`
-    table.innerHTML = tableHTML
+    tableHTML += `</tbody>`;
+    table.innerHTML = tableHTML;
+
+
+    const changeCells = table.querySelectorAll(".stonks");
+    data.forEach((item, index) => {
+        const changeCell = changeCells[index];
+        const icon = changePrice(item.change);
+        changeCell.appendChild(icon);
+    });
 };
 
 // format dollar
@@ -54,19 +62,17 @@ const formatMarketCap = (marketCap) =>{
 }
 
 //color style
-const changePrice = (change)=>{
-
-    const stonk = document.createElement("i")
-    const changeico = document.getElementById("four")
-    if(change > 0){
-        stonk.className ="fa-solid fa-arrow-trend-up"
-        stonk.style.color = "lightgreen"
+const changePrice = (change) => {
+    const stonk = document.createElement("i");
+    if (change > 0) {
+        stonk.className = "fa-solid fa-arrow-trend-up";
+        stonk.style.color = "lightgreen";
+        
     } else {
-        stonk.className = "fa-solid fa-arrow-trend-down"
-        stonk.style.color = "red"
+        stonk.className = "fa-solid fa-arrow-trend-down";
+        stonk.style.color = "red";
+        
     }
-    changeico.appendChild(stonk)
+    return stonk;
 }
 
-{/* <i class="fa-solid fa-arrow-trend-up"></i> */}
-{/* <i class="fa-solid fa-arrow-trend-down"></i> */}
