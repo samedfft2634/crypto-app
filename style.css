@@ -24,7 +24,7 @@ nav{
 
 .container{
 	justify-content: start !important;
-	flex-wrap: nowrap;
+	flex-wrap: nowrap !important;
 }
 
 form{
@@ -33,15 +33,10 @@ form{
 
 #searchInput{
 	margin-left: 1rem;
-	width: 600px;
 }
 
-@media screen and (max-width:700px){
+@media  (max-width:700px){
     body{
         font-size: .7rem;
     }
-	#searchInput{
-		width: 400px !important;
-	}
-
 }
